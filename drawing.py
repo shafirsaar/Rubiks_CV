@@ -1,7 +1,6 @@
 import numpy as np
 import cube as rubiks
 from graphics import *
-import drawing
 
 def draw_cube(rects, win):
     for i in range(3):

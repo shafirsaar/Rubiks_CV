@@ -1,12 +1,7 @@
 import numpy as np
 
-
-def rot(arr, n):
-    for i in range(n):
-        arr = np.rot90(arr)
-    return arr
-
 class Cube:
+    """A rubiks cube class. yet to be compatible with sizes other than 3X3."""
     def __init__(self, size):
         self.size = size
         self.sides = np.zeros((6, self.size, self.size))
@@ -18,6 +13,11 @@ class Cube:
         return np.array_equal(a.sides, self.sides)
 
     def rotate(self, direction):
+        """
+        Rotates the cube in a given direction
+        :param direction: R,L,Rz,Lz
+        :return: None
+        """
         if direction == "R":
             for i in range(6):
                 self.sides[i] = np.rot90(self.sides[i])
@@ -49,8 +49,13 @@ class Cube:
             print("error")
 
     def move(self, shift):
+        """
+        Moves a piece in a certain way
+        :param shift: U,u,R,r,L,l,D,d,F,f
+        :return: None
+        """
         if shift == "U":
-            self.sides[0] = rot(self.sides[0], 3)
+            self.sides[0] = np.rot90(np.rot90(np.rot90(self.sides[0], 3)))
             temp = np.copy(self.sides[2, 0])
             self.sides[2, 0] = np.copy(self.sides[3, 0])
             self.sides[3, 0] = np.copy(self.sides[4, 0])
@@ -98,10 +103,20 @@ class Cube:
             print("error")
 
     def scramble(self, alg):
+        """
+        moves the cube by a string.
+        :param alg: string of moves
+        :return: None
+        """
         for letter in alg:
             self.move(letter)
 
     def solve3moves(self, cube):
+        """
+        finds all possible algorithms to take a cube to a certain state (max 3 moves)
+        :param cube: the wanted cube
+        :return: None
+        """
         arr = ["R", "r", "L", "l", "d", "D", "F", "f", "U", "u"]
         for a in arr:
             self.move(a)
@@ -121,7 +136,3 @@ class Cube:
                     if np.array_equal(self.sides[2], cube.sides[2]):
                         print(a, b, c)
                     self.scramble(c+c+c+b+b+b+a+a+a)
-
-    def recursive_solve(self,cube):
-        arr = ["R", "r", "L", "l", "d", "D", "F", "f", "U", "u"]
-
